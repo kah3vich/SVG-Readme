@@ -1,15 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Header, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller('readme')
+@Controller('')
 export class AppController {
-  @Get('/title')
-  getTitle(@Query('title') title: string): string {
-    return AppService.getSubtitle(title);
+  @Get('/')
+  @Header('content-type', 'image/svg+xml')
+  getTitle(): string {
+    return AppService.getSubtitle('Hello');
   }
 
-  @Get('/subtitle')
-  getSubtitle(@Query('subtitle') subtitle: string) {
-    return AppService.getSubtitle(subtitle);
-  }
+  // @Get('/subtitle')
+  // @Header('content-type', 'image/svg+xml')
+  // getSubtitle(@Query('subtitle') subtitle: string) {
+  //   return AppService.getSubtitle(subtitle);
+  // }
 }
