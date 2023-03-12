@@ -11,6 +11,9 @@ export class AppService {
       if (params.type === 'subtitle') {
         return this.getSvg(params.content.split('||').join(' '), 25, 500);
       }
+      if (params.type === 'span') {
+        return this.getSvg(params.content.split('||').join(' '), 18, 500);
+      }
       if (params.type === 'description') {
         return this.getSvg(
           params.content
