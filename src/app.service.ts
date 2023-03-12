@@ -13,7 +13,7 @@ export class AppService {
       }
       if (params.type === 'description') {
         return this.getSvg(
-          params.content.replace('<br>', '<br>|space|<br>').split('<br>'),
+          params.content.split('<br>').join('<br>|space|<br>').split('<br>'),
           25,
           500,
         );
@@ -39,6 +39,7 @@ export class AppService {
         </style>
         <div id="readme">
       `;
+
       content.forEach((el) => {
         if (el === '|space|') {
           result += '<br />';
@@ -56,7 +57,7 @@ export class AppService {
                       font-weight: ${weight};
                       line-height: ${size + 5}px;
                       letter-spacing: -1px;
-                      text-align: center;
+                      text-align: left;
                   }
               </style>
             </div>
