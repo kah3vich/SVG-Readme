@@ -1,7 +1,7 @@
 // import { Controller, Get, Header, Query } from '@nestjs/common';
 // import { AppService } from './app.service';
 
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Header, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 // @Controller()
@@ -20,16 +20,28 @@ import { AppService } from './app.service';
 //   }
 // }
 
+// @Controller('/readme')
+// export class AppController {
+//   constructor(private readonly appService: AppService) {}
+
+//   @Get()
+//   getUsers(@Query() params: TReadmeParams): string {
+//     return this.appService.getReadme(params);
+//   }
+// }
+
 export type TReadmeParams = {
   type: 'title' | 'subtitle' | 'description';
+  content: string;
 };
 
-@Controller('/readme')
+@Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getUsers(@Query() params: TReadmeParams): string {
+  @Get('/readme')
+  @Header('content-type', 'image/svg+xml')
+  getTitle(@Query() params: TReadmeParams): string {
     return this.appService.getReadme(params);
   }
 }
