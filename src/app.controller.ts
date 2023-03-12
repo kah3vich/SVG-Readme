@@ -1,7 +1,7 @@
 import { Controller, Get, Header, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller('')
+@Controller('/readme')
 export class AppController {
   @Get('/title')
   @Header('content-type', 'image/svg+xml')
