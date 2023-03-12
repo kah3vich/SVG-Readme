@@ -6,14 +6,19 @@ export class AppService {
   getReadme(params: TReadmeParams): string {
     if (params.content) {
       if (params.type === 'title') {
-        return this.getSvg(params.content, 45, 600);
+        return this.getSvg(params.content.split('||').join(' '), 45, 600);
       }
       if (params.type === 'subtitle') {
-        return this.getSvg(params.content, 25, 500);
+        return this.getSvg(params.content.split('||').join(' '), 25, 500);
       }
       if (params.type === 'description') {
         return this.getSvg(
-          params.content.split('<br>').join('<br>|space|<br>').split('<br>'),
+          params.content
+            .split('||')
+            .join(' ')
+            .split('<br>')
+            .join('<br>|space|<br>')
+            .split('<br>'),
           25,
           500,
         );
