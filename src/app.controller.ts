@@ -6,12 +6,6 @@ import { TReadmeParams } from './types';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('/')
-  @Header('content-type', 'image/svg+xml')
-  getString(): string {
-    return '';
-  }
-
   @Get('/svg')
   @Header('content-type', 'image/svg+xml')
   getReadme(@Query() params: TReadmeParams): string {
