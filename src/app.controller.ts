@@ -3,10 +3,10 @@ import { AppService } from './app.service';
 
 @Controller('')
 export class AppController {
-  @Get('/')
+  @Get('/title')
   @Header('content-type', 'image/svg+xml')
-  getTitle(): string {
-    return AppService.getSubtitle('Hello');
+  getTitle(@Query('title') title: string): string {
+    return AppService.getSubtitle(title);
   }
 
   // @Get('/subtitle')
