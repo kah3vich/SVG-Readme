@@ -2,7 +2,7 @@ import { Controller, Get, Header, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TReadmeParams } from './types';
 
-@Controller('/test')
+@Controller('test')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
