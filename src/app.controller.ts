@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { TReadmeParams } from './types';
+import type { TReadmeToSvgParams } from './types';
 
 @Controller('readme')
 export class AppController {
@@ -8,7 +8,7 @@ export class AppController {
 
   @Get('/svg')
   @Header('content-type', 'image/svg+xml')
-  getReadme(@Query() params: TReadmeParams): string {
-    return this.appService.getReadme(params);
+  getSvg(@Query() params: TReadmeToSvgParams): string | Error {
+    return this.appService.getSvg(params);
   }
 }

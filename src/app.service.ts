@@ -1,35 +1,62 @@
 import { Injectable } from '@nestjs/common';
-import { TReadmeParams } from './types';
+import { TReadmeToSvgContentParams, TReadmeToSvgParams } from './types';
 
 @Injectable()
 export class AppService {
-  getReadme(params: TReadmeParams): string {
+  getSvg(params: TReadmeToSvgParams): string | Error {
     if (params.content) {
+      if (params.type === 'custom') {
+        return this.getSvgContent({
+          content: (params.content as string).split('||').join(' '),
+          size: 45,
+          weight: 600,
+          color: params.color,
+          align: params.align,
+        });
+      }
       if (params.type === 'title') {
-        return this.getSvg(params.content.split('||').join(' '), 45, 600);
+        return this.getSvgContent({
+          content: (params.content as string).split('||').join(' '),
+          size: 45,
+          weight: 600,
+        });
       }
       if (params.type === 'subtitle') {
-        return this.getSvg(params.content.split('||').join(' '), 25, 500);
+        return this.getSvgContent({
+          content: (params.content as string).split('||').join(' '),
+          size: 25,
+          weight: 500,
+        });
       }
       if (params.type === 'span') {
-        return this.getSvg(params.content.split('||').join(' '), 18, 500);
+        return this.getSvgContent({
+          content: (params.content as string).split('||').join(' '),
+          size: 18,
+          weight: 500,
+        });
       }
       if (params.type === 'description') {
-        return this.getSvg(
-          params.content
+        return this.getSvgContent({
+          content: (params.content as string)
             .split('||')
             .join(' ')
             .split('<br>')
             .join('<br>|space|<br>')
             .split('<br>'),
-          25,
-          500,
-        );
+          size: 25,
+          weight: 500,
+        });
       }
     }
   }
 
-  getSvg(content: string | string[], size: number, weight: number): string {
+  getSvgContent({
+    content,
+    size,
+    weight,
+    color = '#61dafb',
+    align,
+  }: TReadmeToSvgContentParams): string {
     if (typeof content === 'object') {
       let result = '';
       result += `
@@ -60,12 +87,12 @@ export class AppService {
                   #readme {
                       font-family: 'Martian Mono', monospace;
                       width: 100%;
-                      color: #61dafb;
+                      color: ${color};
                       font-size: ${size}px;
                       font-weight: ${weight};
-                      line-height: ${size + 5}px;
+                      line-height: ${+size + 5}px;
                       letter-spacing: -1px;
-                      text-align: left;
+                      text-align: ${align || 'left'};
                   }
               </style>
             </div>
@@ -94,12 +121,12 @@ export class AppService {
               #readme {
                   font-family: 'Martian Mono', monospace;
                   width: 100%;
-                  color: #61dafb;
+                  color: ${color};
                   font-size: ${size}px;
                   font-weight: ${weight};
-                  line-height: ${size + 5}px;
+                  line-height: ${+size + 5}px;
                   letter-spacing: -1px;
-                  text-align: center;
+                  text-align: ${align || 'center'};
               }
           </style>
         </div>
