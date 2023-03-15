@@ -8,8 +8,8 @@ export class AppService {
       if (params.type === 'custom') {
         return this.getSvgContent({
           content: (params.content as string).split('||').join(' '),
-          size: 45,
-          weight: 600,
+          size: params.size,
+          weight: params.weight,
           color: params.color,
           align: params.align,
         });
