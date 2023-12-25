@@ -156,7 +156,9 @@ export class AppService {
 		}
 
 		if (dto.type === 'result') {
-			return { status: 'success', message: 'Около сейфа не смотрел ?' };
+			if (+dto.value >= 1100) return { status: 'success', message: 'Около сейфа не смотрел ?' };
+
+			throw new HttpException({ message: 'Неправильно' }, 400);
 		}
 
 		throw new HttpException({ message: 'Ошибка запроса' }, 400);
