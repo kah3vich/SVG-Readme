@@ -1,5 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { IndexDto } from './dto/index.dto';
+import { Injectable } from '@nestjs/common';
 import { TReadmeToSvgContentParams, TReadmeToSvgParams } from './types';
 
 @Injectable()
@@ -134,33 +133,5 @@ export class AppService {
       </foreignObject>
     </svg>
   `;
-	}
-
-	santa(dto: IndexDto) {
-		if (dto.type === 'first') {
-			if (+dto.value >= 795) return { status: 'success' };
-
-			throw new HttpException({ message: 'Неправильно' }, 400);
-		}
-
-		if (dto.type === 'second') {
-			if (+dto.value >= 6) return { status: 'success' };
-
-			throw new HttpException({ message: 'Неправильно' }, 400);
-		}
-
-		if (dto.type === 'third') {
-			if (+dto.value === 322) return { status: 'success' };
-
-			throw new HttpException({ message: 'Неправильно' }, 400);
-		}
-
-		if (dto.type === 'result') {
-			if (+dto.value >= 1100) return { status: 'success', message: 'Около сейфа не смотрел ?' };
-
-			throw new HttpException({ message: 'Неправильно' }, 400);
-		}
-
-		throw new HttpException({ message: 'Ошибка запроса' }, 400);
 	}
 }
