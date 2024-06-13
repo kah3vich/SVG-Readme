@@ -1,52 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { TReadmeToSvgContentParams, TReadmeToSvgParams } from './types';
+import { svgEnd, svgStart } from './constant';
+import { SvgContentParams, SvgParams } from './types';
+import { percentToUtf8Encoding, removeAllSymbol, utf8ToPercentEncoding } from './utils';
 
 @Injectable()
 export class AppService {
-	getSvg(params: TReadmeToSvgParams): string | Error {
-		if (params.content) {
-			if (params.type === 'custom') {
-				return this.getSvgContent({
-					content: (params.content as string).split('||').join(' '),
-					size: params.size,
-					weight: params.weight,
-					color: params.color,
-					align: params.align,
-				});
+	svg(params: SvgParams): string | Error {
+		const config = {
+			custom: {
+				size: params.size,
+				weight: params.weight,
+				color: params.color,
+				align: params.align,
+			},
+			title: {
+				content: params.content,
+				size: 45,
+				weight: 600,
+			},
+			subtitle: {
+				size: 25,
+				weight: 500,
+			},
+			span: {
+				size: 18,
+				weight: 500,
+			},
+			description: {
+				size: 25,
+				weight: 500,
 			}
-			if (params.type === 'title') {
-				return this.getSvgContent({
-					content: (params.content as string).split('||').join(' '),
-					size: 45,
-					weight: 600,
-				});
-			}
-			if (params.type === 'subtitle') {
-				return this.getSvgContent({
-					content: (params.content as string).split('||').join(' '),
-					size: 25,
-					weight: 500,
-				});
-			}
-			if (params.type === 'span') {
-				return this.getSvgContent({
-					content: (params.content as string).split('||').join(' '),
-					size: 18,
-					weight: 500,
-				});
-			}
-			if (params.type === 'description') {
-				return this.getSvgContent({
-					content: (params.content as string)
-						.split('||')
-						.join(' ')
-						.split('<br>')
-						.join('<br>|space|<br>')
-						.split('<br>'),
-					size: 25,
-					weight: 500,
-				});
-			}
+		}
+
+		const data = config[params.type]
+		const str = removeAllSymbol(params.content)
+
+		if (params.content && data) {
+			return this.getSvgContent({
+				content: percentToUtf8Encoding(str),
+				...data
+			});
 		}
 	}
 
@@ -55,25 +48,10 @@ export class AppService {
 		size,
 		weight,
 		color = '#61dafb',
-		align,
-	}: TReadmeToSvgContentParams): string {
+		align = 'left',
+	}: SvgContentParams): string {
 		if (typeof content === 'object') {
-			let result = '';
-			result += `
-        <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" fill="none" data-reactroot="">
-        <foreignObject width="100%" height="100%">
-        <div xmlns="http://www.w3.org/1999/xhtml">
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100;200;300;400;500;600;700;800&amp;display=swap')
-
-          * {
-            margin: 0;
-            box-sizing: content-box;
-            font-family: 'Martian Mono', monospace;
-          }
-        </style>
-        <div id="readme">
-      `;
+			let result = svgStart
 
 			content.forEach(el => {
 				if (el === '|space|') {
@@ -82,56 +60,55 @@ export class AppService {
 					result += el;
 				}
 			});
-			result += `</div>
-              <style>
-                  #readme {
-                      font-family: 'Martian Mono', monospace;
-                      width: 100%;
-                      color: ${color};
-                      font-size: ${size}px;
-                      font-weight: ${weight};
-                      line-height: ${+size + 5}px;
-                      letter-spacing: -1px;
-                      text-align: ${align || 'left'};
-                  }
-              </style>
-            </div>
-          </foreignObject>
-        </svg>
-      `;
+
+			result += `
+			</div>
+				<style>
+					#readme {
+						font-family: 'Martian Mono', monospace;
+						width: 100%;
+						color: ${color};
+						font-size: ${size}px;
+						font-weight: ${weight};
+						line-height: ${+size + 5}px;
+						letter-spacing: -1px;
+						text-align: ${align || 'left'};
+					}
+				</style>
+				${svgEnd}
+			`;
 
 			return result;
 		}
 
 		return `
-    <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" fill="none" data-reactroot="">
-      <foreignObject width="100%" height="100%">
-        <div xmlns="http://www.w3.org/1999/xhtml">
-          <style>
-              @import url('https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100;200;300;400;500;600;700;800&amp;display=swap')
+			${svgStart}${content}
+			</div>
+				<style>
+					#readme {
+						font-family: 'Martian Mono', monospace;
+						width: 100%;
+						color: ${color};
+						font-size: ${size}px;
+						font-weight: ${weight};
+						line-height: ${+size + 5}px;
+						letter-spacing: -1px;
+						text-align: ${align || 'center'};
+					}
+				</style>
+			${svgEnd}
+			`;
+	}
 
-              * {
-                  margin: 0;
-                  box-sizing: content-box;
-                  font-family: 'Martian Mono', monospace;
-              }
-          </style>
-          <div id="readme">${content}</div>
-          <style>
-              #readme {
-                  font-family: 'Martian Mono', monospace;
-                  width: 100%;
-                  color: ${color};
-                  font-size: ${size}px;
-                  font-weight: ${weight};
-                  line-height: ${+size + 5}px;
-                  letter-spacing: -1px;
-                  text-align: ${align || 'center'};
-              }
-          </style>
-        </div>
-      </foreignObject>
-    </svg>
-  `;
+	convert(body) {
+		if (!body || !body.data) {
+			return {
+				data: 'invalid body.'
+			}
+		}
+
+		return {
+			data: utf8ToPercentEncoding(body.data)
+		}
 	}
 }

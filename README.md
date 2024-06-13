@@ -15,12 +15,18 @@
 <img src="https://svg-readme.vercel.app/readme/svg?type=description&content=Api:" alt="subtitle" width="100%" height="33">
 
 ```bash
-https://svg-readme.vercel.app/readme/svg?
+GET https://svg-readme.vercel.app/readme/svg?
 
-type: 'title' / 'subtitle' / 'description' / 'span' /'custom'
+type: 'title', 'subtitle', 'description', 'span', 'custom'
 content: string
 color: string  -> ('custom')
 size: string -> ('custom')
 weight: string -> ('custom')
-align: 'left' / 'center' / 'right' ('custom')
+align: 'left', 'center', 'right' -> ('custom')
+
+POST https://svg-readme.vercel.app/readme/convert
+
+{
+  "data": "SVG Readme (backend)"
+}
 ```
