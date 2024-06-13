@@ -48,7 +48,7 @@ export class AppService {
 		size,
 		weight,
 		color = '#61dafb',
-		align = 'left',
+		align = 'center',
 	}: SvgContentParams): string {
 		if (typeof content === 'object') {
 			let result = svgStart
